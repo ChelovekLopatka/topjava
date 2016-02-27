@@ -41,13 +41,11 @@ public class UserMealsUtil {
                         sum += userMealFirst.getCalories();
                 }
             }
-            if (sum != 0 && sum > 2000)
+            if (sum != 0)
                 userMealWithExceeds.add(new UserMealWithExceed(userMeal.getDateTime(), userMeal.getDescription(), userMeal.getCalories(), true));
         }
 
-        for (UserMealWithExceed umwe : userMealWithExceeds){
-            System.out.println(umwe.toString());
-        }
+
 
 
         return userMealWithExceeds;
