@@ -1,10 +1,10 @@
 package ru.javawebinar.topjava.repository;
 
+import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.util.UserMealsUtil;
 
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -41,7 +41,11 @@ public class InMemoryUserMealRepositoryImpl implements UserMealRepository {
 
     @Override
     public Collection<UserMeal> getAll() {
-        return repository.values();
+        List<UserMeal> userMealsSortedByTime = new ArrayList<>();
+        userMealsSortedByTime.addAll(repository.values());
+
+        Collections.sort(userMealsSortedByTime, (o1, o2) -> o1.getDateTime().compareTo(o2.getDateTime()));
+        return userMealsSortedByTime;
     }
 }
 
