@@ -4,6 +4,7 @@ import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.util.UserMealsUtil;
+import ru.javawebinar.topjava.util.exception.ExceptionUtil;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,16 +24,14 @@ public class InMemoryUserMealRepositoryImpl implements UserMealRepository {
     }
 
     @Override
-    public boolean save(UserMeal userMeal) {
-        for (Map.Entry<Integer, Map<Integer, UserMeal>> pair : repository.entrySet()){
-            if (userMeal.isNew()) {
-                userMeal.setId(counter.incrementAndGet());
-                pair.getValue().put(userMeal.getId(), userMeal);
-                return true;
-            }
-
+    public UserMeal save(UserMeal userMeal) {
+        if (userMeal.isNew()) {
+            userMeal.setId(counter.incrementAndGet());
         }
-        return false;
+        for (Map.Entry<Integer, Map<Integer, UserMeal>> pair : repository.entrySet()){
+            pair.getValue().put(userMeal.getId(), userMeal);
+        }
+        return userMeal;
     }
 
     @Override
@@ -47,9 +46,8 @@ public class InMemoryUserMealRepositoryImpl implements UserMealRepository {
     }
 
     @Override
-    public UserMeal get(int userId, int mealId) {
+    public UserMeal get( int mealId) {
         for (Map.Entry<Integer, Map<Integer, UserMeal>> pair : repository.entrySet()){
-            if (pair.getKey() == userId)
                 return pair.getValue().get(mealId);
         }
         return null;

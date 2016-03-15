@@ -23,10 +23,7 @@ public class UserMealServiceImpl implements UserMealService {
     @Autowired
     private UserMealRepository repository;
 
-    @Override
-    public void delete(int id) {
-        ExceptionUtil.check(repository.delete(id), id);
-    }
+
 
     @Override
     public List<UserMealWithExceed> getAll(){
@@ -46,8 +43,13 @@ public class UserMealServiceImpl implements UserMealService {
     }
     @Override
     public UserMeal save(UserMeal userMeal){
-        ExceptionUtil.check(repository.save(userMeal), userMeal.getId());
-        return userMeal;
+        return ExceptionUtil.check(repository.save(userMeal), userMeal.getId());
+
+    }
+
+    @Override
+    public void delete(int id) {
+        ExceptionUtil.check(repository.delete(id), id);
     }
 
 }
