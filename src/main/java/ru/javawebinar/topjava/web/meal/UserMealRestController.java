@@ -39,6 +39,10 @@ public class UserMealRestController {
         return service.getAll();
     }
 
+    public UserMeal get(int id){
+        return service.get(id);
+    }
+
 
 
 

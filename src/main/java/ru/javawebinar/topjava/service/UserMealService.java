@@ -19,4 +19,6 @@ public interface UserMealService {
     List<UserMealWithExceed> getAllMealsFilteredByDateAndTime(LocalDate startDate, LocalTime startTime,
                                                               LocalDate endDate, LocalTime endTime);
     UserMeal save(UserMeal userMeal);
+
+    UserMeal get(int id);
 }

@@ -48,8 +48,15 @@ public class UserMealServiceImpl implements UserMealService {
     }
 
     @Override
+    public UserMeal get(int id) {
+        return repository.get(id);
+    }
+
+    @Override
     public void delete(int id) {
         ExceptionUtil.check(repository.delete(id), id);
     }
+
+
 
 }

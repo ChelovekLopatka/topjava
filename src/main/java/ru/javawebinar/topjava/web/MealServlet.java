@@ -65,7 +65,7 @@ public class MealServlet extends HttpServlet {
         } else {
             final UserMeal meal = action.equals("create") ?
                     new UserMeal(LocalDateTime.now(), "", 1000) :
-                    repository.get(getId(request));
+                    userMealRestController.get(getId(request));
             request.setAttribute("meal", meal);
             request.getRequestDispatcher("mealEdit.jsp").forward(request, response);
         }
