@@ -10,9 +10,9 @@ public class ExceptionUtil {
         check(found, "id=" + id);
     }
 
-    public static <T> T check(T object, int id) {
-        return check(object, "id=" + id);
-    }
+//    public static <T> T check(T object, int id) {
+//        return check(object, "id=" + id);
+//    }
 
     public static <T> T check(T object, String msg) {
         check(object != null, msg);

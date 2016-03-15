@@ -9,13 +9,13 @@ import java.util.Collection;
  * 06.03.2015.
  */
 public interface UserMealRepository {
-    UserMeal save(UserMeal userMeal);
+    boolean save(UserMeal userMeal);
 
-    void delete(int id);
+    boolean delete(int id);
 
     UserMeal get(int userId, int mealId);
 
-    Collection<UserMeal> getAllUsersMeal(int userId);
+    Collection<UserMeal> getAllUsersMeals(int userId);
 
     Collection<UserMeal> getAll();
 }

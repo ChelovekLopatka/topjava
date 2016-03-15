@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.repository;
 
+import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.util.UserMealsUtil;
@@ -12,6 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * GKislin
  * 15.09.2015.
  */
+@Repository
 public class InMemoryUserMealRepositoryImpl implements UserMealRepository {
     private Map<Integer, Map<Integer, UserMeal>> repository = new ConcurrentHashMap<>();
     private AtomicInteger counter = new AtomicInteger(0);
@@ -21,19 +23,27 @@ public class InMemoryUserMealRepositoryImpl implements UserMealRepository {
     }
 
     @Override
-    public UserMeal save(UserMeal userMeal) {
+    public boolean save(UserMeal userMeal) {
         for (Map.Entry<Integer, Map<Integer, UserMeal>> pair : repository.entrySet()){
             if (userMeal.isNew()) {
                 userMeal.setId(counter.incrementAndGet());
+                pair.getValue().put(userMeal.getId(), userMeal);
+                return true;
             }
-            pair.getValue().put(userMeal.getId(), userMeal);
+
         }
-        return userMeal;
+        return false;
     }
 
     @Override
-    public void delete(int id) {
-        repository.remove(id);
+    public boolean delete(int id) {
+        for (Map.Entry<Integer, Map<Integer, UserMeal>> pair : repository.entrySet()){
+            if (pair.getValue().containsKey(id)){
+                pair.getValue().remove(id);
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -46,7 +56,7 @@ public class InMemoryUserMealRepositoryImpl implements UserMealRepository {
     }
 
     @Override
-    public Collection<UserMeal> getAllUsersMeal(int userId) {
+    public Collection<UserMeal> getAllUsersMeals(int userId) {
         List<UserMeal> userMealsSortedByTime = new ArrayList<>();
         for (Map.Entry<Integer, Map<Integer, UserMeal>> pair : repository.entrySet()) {
             if (pair.getKey() == userId) {
