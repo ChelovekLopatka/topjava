@@ -23,14 +23,9 @@ public class UserMealServiceImpl implements UserMealService {
     @Autowired
     private UserMealRepository repository;
 
-
-
     @Override
     public List<UserMealWithExceed> getAll(){
-        return UserMealsUtil.getFilteredWithExceeded(repository.getAll(),
-                LocalTime.MIN,
-                LocalTime.MAX,
-                UserMealsUtil.DEFAULT_CALORIES_PER_DAY);
+        return UserMealsUtil.getWithExceeded(repository.getAll(), UserMealsUtil.DEFAULT_CALORIES_PER_DAY);
     }
 
     @Override

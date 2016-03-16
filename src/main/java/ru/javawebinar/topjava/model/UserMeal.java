@@ -9,6 +9,16 @@ import java.time.LocalDateTime;
 public class UserMeal {
     private Integer id;
 
+    private Integer usersId;
+
+    public Integer getUsersId() {
+        return usersId;
+    }
+
+    public void setUsersId(Integer usersId) {
+        this.usersId = usersId;
+    }
+
     private final LocalDateTime dateTime;
 
     private final String description;

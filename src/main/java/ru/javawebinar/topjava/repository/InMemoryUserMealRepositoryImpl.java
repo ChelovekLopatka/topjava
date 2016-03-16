@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @Repository
 public class InMemoryUserMealRepositoryImpl implements UserMealRepository {
-    private Map<Integer, Map<Integer, UserMeal>> repository = new ConcurrentHashMap<>();
+    private Map<Integer, UserMeal> repository = new ConcurrentHashMap<>();
     private AtomicInteger counter = new AtomicInteger(0);
 
     {
@@ -28,53 +28,44 @@ public class InMemoryUserMealRepositoryImpl implements UserMealRepository {
         if (userMeal.isNew()) {
             userMeal.setId(counter.incrementAndGet());
         }
-        for (Map.Entry<Integer, Map<Integer, UserMeal>> pair : repository.entrySet()){
-            pair.getValue().put(userMeal.getId(), userMeal);
-        }
+        repository.put(userMeal.getId(), userMeal);
         return userMeal;
     }
 
     @Override
     public boolean delete(int id) {
-        for (Map.Entry<Integer, Map<Integer, UserMeal>> pair : repository.entrySet()){
-            if (pair.getValue().containsKey(id)){
-                pair.getValue().remove(id);
-                return true;
-            }
+        if (repository.containsKey(id)){
+            repository.remove(id);
+            return true;
         }
         return false;
     }
 
     @Override
-    public UserMeal get( int mealId) {
-        for (Map.Entry<Integer, Map<Integer, UserMeal>> pair : repository.entrySet()){
-                return pair.getValue().get(mealId);
-        }
-        return null;
-    }
-
-    @Override
-    public Collection<UserMeal> getAllUsersMeals(int userId) {
-        List<UserMeal> userMealsSortedByTime = new ArrayList<>();
-        for (Map.Entry<Integer, Map<Integer, UserMeal>> pair : repository.entrySet()) {
-            if (pair.getKey() == userId) {
-                userMealsSortedByTime.addAll(pair.getValue().values());
-            }
-        }
-
-        Collections.sort(userMealsSortedByTime, (o1, o2) -> o1.getDateTime().compareTo(o2.getDateTime()));
-        return userMealsSortedByTime;
+    public UserMeal get(int id) {
+        return repository.get(id);
     }
 
     @Override
     public Collection<UserMeal> getAll() {
         List<UserMeal> userMealsSortedByTime = new ArrayList<>();
-        for (Map.Entry<Integer, Map<Integer, UserMeal>> pair : repository.entrySet()) {
-            userMealsSortedByTime.addAll(pair.getValue().values());
-        }
+        userMealsSortedByTime.addAll(repository.values());
 
         Collections.sort(userMealsSortedByTime, (o1, o2) -> o1.getDateTime().compareTo(o2.getDateTime()));
         return userMealsSortedByTime;
     }
+
+    //    @Override
+//    public Collection<UserMeal> getAllUsersMeals(int userId) {
+//        List<UserMeal> userMealsSortedByTime = new ArrayList<>();
+//        for (Map.Entry<Integer, Map<Integer, UserMeal>> pair : repository.entrySet()) {
+//            if (pair.getKey() == userId) {
+//                userMealsSortedByTime.addAll(pair.getValue().values());
+//            }
+//        }
+//
+//        Collections.sort(userMealsSortedByTime, (o1, o2) -> o1.getDateTime().compareTo(o2.getDateTime()));
+//        return userMealsSortedByTime;
+//    }
 }
 
