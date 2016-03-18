@@ -2,7 +2,6 @@ package ru.javawebinar.topjava.repository;
 
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.UserMeal;
-import ru.javawebinar.topjava.repository.UserMealRepository;
 import ru.javawebinar.topjava.util.TimeUtil;
 import ru.javawebinar.topjava.util.UserMealsUtil;
 
@@ -13,8 +12,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import static ru.javawebinar.topjava.repository.mock.InMemoryUserRepositoryImpl.ADMIN_ID;
-import static ru.javawebinar.topjava.repository.mock.InMemoryUserRepositoryImpl.USER_ID;
 
 /**
  * GKislin
@@ -28,6 +25,10 @@ public class InMemoryUserMealRepositoryImpl implements UserMealRepository {
     // Map  userId -> (mealId-> meal)
     private Map<Integer, Map<Integer, UserMeal>> repository = new ConcurrentHashMap<>();
     private AtomicInteger counter = new AtomicInteger(0);
+
+    private static final int ADMIN_ID = 1;
+
+    private static final int USER_ID = 1;
 
     {
         UserMealsUtil.MEAL_LIST.forEach(um -> save(um, USER_ID));
