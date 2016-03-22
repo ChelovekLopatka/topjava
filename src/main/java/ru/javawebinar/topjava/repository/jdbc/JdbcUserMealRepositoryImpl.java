@@ -61,18 +61,18 @@ public class JdbcUserMealRepositoryImpl implements UserMealRepository {
 
     @Override
     public boolean delete(int id, int userId) {
-        return (jdbcTemplate.update("DELETE FROM meals WHERE id = ?", id) != 0);
+        return (jdbcTemplate.update("DELETE FROM meals WHERE id = ? AND user_id=?", id, userId) != 0);
     }
 
     @Override
     public UserMeal get(int id, int userId) {
-        List<UserMeal> meals = jdbcTemplate.query("SELECT * FROM meals WHERE id=?", ROW_MAPPER, id);
+        List<UserMeal> meals = jdbcTemplate.query("SELECT * FROM meals WHERE id=? AND user_id=?", ROW_MAPPER, id, userId);
         return DataAccessUtils.singleResult(meals);
     }
 
     @Override
     public List<UserMeal> getAll(int userId) {
-        return jdbcTemplate.query("SELECT * FROM meals ORDER BY datetime DESC ", ROW_MAPPER);
+        return jdbcTemplate.query("SELECT * FROM meals WHERE user_id =? ORDER BY datetime DESC ", ROW_MAPPER, userId);
     }
 
     @Override
@@ -80,6 +80,6 @@ public class JdbcUserMealRepositoryImpl implements UserMealRepository {
         //TODO MAKE YOUR OWN ROWMAPPER
         Timestamp start = Timestamp.valueOf(startDate);
         Timestamp end = Timestamp.valueOf(endDate);
-        return jdbcTemplate.query("SELECT * FROM meals WHERE datetime", ROW_MAPPER, start, end);
+        return jdbcTemplate.query("SELECT * FROM meals WHERE datetime BETWEEN ? AND ?", ROW_MAPPER, start, end);
     }
 }
