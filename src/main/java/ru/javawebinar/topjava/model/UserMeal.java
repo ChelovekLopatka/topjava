@@ -1,20 +1,57 @@
 package ru.javawebinar.topjava.model;
 
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
+import com.sun.istack.internal.NotNull;
+import org.hibernate.validator.constraints.Length;
+
+import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
  * GKislin
  * 11.01.2015.
  */
+@NamedQueries({
+        @NamedQuery(name = UserMeal.GET, query = "SELECT m FROM UserMeal m WHERE m.id=:id AND m.user.id=:id"),
+        @NamedQuery(name = UserMeal.DELETE, query = "DELETE FROM UserMeal m WHERE m.id=:id AND m.user.id=:userId"),
+        @NamedQuery(name = UserMeal.GET_ALL, query = "SELECT m FROM UserMeal m WHERE m.user.id=:userId"),
+        @NamedQuery(name = UserMeal.GET_BETWEEN, query = "SELECT m FROM UserMeal m WHERE m.user.id=:userId AND m.dateTime BETWEEN startDate AND endDate")
+        })
+@Entity
+@Table(name = "meals")
 public class UserMeal extends BaseEntity {
 
+    public static final String GET = "UserMeal.get";
+    public static final String DELETE = "UserMeal.delete";
+    public static final String GET_ALL = "UserMeal.getAll";
+    public static final String GET_BETWEEN = "UserMeal.getBetween";
+
+    @Column(name = "date_time", columnDefinition = "timestamp default now()")
     private LocalDateTime dateTime;
 
+    @Column(name = "description")
+    @NotNull
+    @Length(max = 45)
     private String description;
 
+    @Column(name = "calories")
+    @NotNull
     protected int calories;
+
+//    @Converter(autoApply = true)
+//    public class LocalDatePersistenceConverter implements
+//            AttributeConverter {
+//        @Override
+//        public java.sql.Date convertToDatabaseColumn(Object entityValue) {
+//            return java.sql.Date.valueOf((LocalDate) entityValue);
+//        }
+//
+//        @Override
+//        public LocalDate convertToEntityAttribute(Object databaseValue) {
+//            java.sql.Date databaseeValue = (java.sql.Date) databaseValue;
+//            return databaseeValue.toLocalDate();
+//        }
+//    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
