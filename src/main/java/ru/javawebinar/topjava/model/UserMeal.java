@@ -4,6 +4,7 @@ import com.sun.istack.internal.NotNull;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -12,46 +13,31 @@ import java.time.LocalDateTime;
  * 11.01.2015.
  */
 @NamedQueries({
-        @NamedQuery(name = UserMeal.GET, query = "SELECT m FROM UserMeal m WHERE m.id=:id AND m.user.id=:id"),
+        @NamedQuery(name = UserMeal.GET, query = "SELECT m FROM UserMeal m WHERE m.id=:id AND m.user.id=:userId"),
         @NamedQuery(name = UserMeal.DELETE, query = "DELETE FROM UserMeal m WHERE m.id=:id AND m.user.id=:userId"),
         @NamedQuery(name = UserMeal.GET_ALL, query = "SELECT m FROM UserMeal m WHERE m.user.id=:userId"),
-        @NamedQuery(name = UserMeal.GET_BETWEEN, query = "SELECT m FROM UserMeal m WHERE m.user.id=:userId AND m.dateTime BETWEEN startDate AND endDate")
+        @NamedQuery(name = UserMeal.ALL_SORTED, query = "SELECT um FROM UserMeal um WHERE um.user.id=:userId ORDER BY um.dateTime DESC"),
+        @NamedQuery(name = UserMeal.GET_BETWEEN, query = "SELECT m FROM UserMeal m WHERE m.user.id=:userId AND m.dateTime BETWEEN startDate AND endDate ORDER BY m.dateTime DESC")
         })
 @Entity
-@Table(name = "meals")
+@Table(name = "meals", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "date_time"}, name = "meals_unique_user_datetime_idx")})
 public class UserMeal extends BaseEntity {
 
     public static final String GET = "UserMeal.get";
     public static final String DELETE = "UserMeal.delete";
     public static final String GET_ALL = "UserMeal.getAll";
     public static final String GET_BETWEEN = "UserMeal.getBetween";
+    public static final String ALL_SORTED = "UserMeal.getAllSorted";
 
-    @Column(name = "date_time", columnDefinition = "timestamp default now()")
+    @Column(name = "date_time", nullable = false)
     private LocalDateTime dateTime;
 
     @Column(name = "description")
-    @NotNull
-    @Length(max = 45)
     private String description;
 
     @Column(name = "calories")
-    @NotNull
+    @Digits(fraction = 0, integer = 4)
     protected int calories;
-
-//    @Converter(autoApply = true)
-//    public class LocalDatePersistenceConverter implements
-//            AttributeConverter {
-//        @Override
-//        public java.sql.Date convertToDatabaseColumn(Object entityValue) {
-//            return java.sql.Date.valueOf((LocalDate) entityValue);
-//        }
-//
-//        @Override
-//        public LocalDate convertToEntityAttribute(Object databaseValue) {
-//            java.sql.Date databaseeValue = (java.sql.Date) databaseValue;
-//            return databaseeValue.toLocalDate();
-//        }
-//    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
