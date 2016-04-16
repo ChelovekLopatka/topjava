@@ -8,6 +8,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
+import java.util.Collection;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.Set;
@@ -55,6 +56,9 @@ public class User extends NamedEntity {
     @Digits(fraction = 0, integer = 4)
     protected int caloriesPerDay = UserMealsUtil.DEFAULT_CALORIES_PER_DAY;
 
+    @OneToMany(fetch = FetchType.LAZY)
+    protected Collection<UserMeal> userMeals;
+
     public User() {
     }
 
@@ -73,6 +77,10 @@ public class User extends NamedEntity {
         this.caloriesPerDay = caloriesPerDay;
         this.enabled = enabled;
         this.roles = roles;
+    }
+
+    public Collection<UserMeal> getUserMeals() {
+        return userMeals;
     }
 
     public String getEmail() {

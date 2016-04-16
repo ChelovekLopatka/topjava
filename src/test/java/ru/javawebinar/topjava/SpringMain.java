@@ -1,7 +1,13 @@
 package ru.javawebinar.topjava;
 
+import org.junit.runner.RunWith;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlConfig;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.javawebinar.topjava.to.UserMealWithExceed;
 import ru.javawebinar.topjava.web.meal.UserMealRestController;
 import ru.javawebinar.topjava.web.user.AdminRestController;
@@ -16,6 +22,11 @@ import java.util.List;
  * User: gkislin
  * Date: 22.08.2014
  */
+@ContextConfiguration({
+        "classpath:spring/spring-app.xml",
+        "classpath:spring/spring-db.xml"
+})
+@ActiveProfiles({Profiles.DATAJPA, Profiles.HSQLDB})
 public class SpringMain {
     public static void main(String[] args) {
         // java 7 Automatic resource management
