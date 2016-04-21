@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ru.javawebinar.topjava.repository.JpaUtil;
 
 public class AbstractJpaUserServiceTest extends AbstractUserServiceTest{
-
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
     protected JpaUtil jpaUtil;
 
