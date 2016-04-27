@@ -17,6 +17,7 @@ import ru.javawebinar.topjava.service.UserService;
 import javax.annotation.PostConstruct;
 
 import static ru.javawebinar.topjava.Profiles.DATAJPA;
+import static ru.javawebinar.topjava.Profiles.HSQLDB;
 import static ru.javawebinar.topjava.Profiles.POSTGRES;
 
 /**
@@ -31,7 +32,7 @@ import static ru.javawebinar.topjava.Profiles.POSTGRES;
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
-@ActiveProfiles({POSTGRES, DATAJPA})
+@ActiveProfiles({HSQLDB, DATAJPA})
 abstract public class AbstractControllerTest {
 
     private static final CharacterEncodingFilter CHARACTER_ENCODING_FILTER = new CharacterEncodingFilter();
